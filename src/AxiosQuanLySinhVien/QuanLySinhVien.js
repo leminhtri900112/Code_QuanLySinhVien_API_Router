@@ -7,7 +7,7 @@ export default class QuanLySinhVien extends Component {
     return (
       <div className="container">
         <h1 className=" display-4 text-center text-success">
-          Quản Lý Sinh Viên Redux-Axios
+          Quản Lý Sinh Viên React-router
         </h1>
         <ModalSinhVien />
         <DanhSachSinhVien />

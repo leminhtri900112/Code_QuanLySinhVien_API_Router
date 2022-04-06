@@ -14,6 +14,7 @@ let initialState = {
 export const quanLySinhVienReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DANH_SACH_SV: {
+      console.log("ok1");
       state.dssv = action.payload;
       return { ...state };
     }
@@ -28,6 +29,7 @@ export const quanLySinhVienReducer = (state = initialState, action) => {
         cloneDanhSachSV.push(action.payload);
         state.dssv = cloneDanhSachSV;
       }
+
       return { ...state };
     }
 
@@ -56,6 +58,7 @@ export const quanLySinhVienReducer = (state = initialState, action) => {
         cloneDanhSachSinhVien[index] = action.payload;
       }
       state.dssv = cloneDanhSachSinhVien;
+
       return { ...state };
     }
 

@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { createAction } from "../Redux/Actions/quanLySinhVienAction";
 import {
   CAP_NHAT_SINH_VIEN,
+  FETCH_DANH_SACH_SV,
   SUA_SINH_VIEN,
   THEM_SINH_VIEN,
 } from "../Redux/Constants/quanLySinhVienConstants";
 
 import Swal from "sweetalert2";
+import { quanLySinhVienService } from "../Services/AxiosQuanLySinhVien";
 
 class ModalSinhVien extends Component {
   state = {
@@ -109,13 +111,71 @@ class ModalSinhVien extends Component {
     }
 
     if (valid) {
-      this.props.dispatch(createAction(type, this.state.sinhVien));
-      // alert("Thêm thành công");
-      Swal.fire({
-        icon: "success",
-        title:
-          type === THEM_SINH_VIEN ? "Thêm thành công" : "Cập nhật thành công",
-      });
+      switch (type) {
+        case THEM_SINH_VIEN:
+          {
+            quanLySinhVienService
+              .addSinhVien(this.state.sinhVien)
+              .then((res) => {
+                // console.log(res);
+                // alert("Thêm thành công");
+                Swal.fire({
+                  icon: "success",
+                  title: "Thêm thành công",
+                });
+                quanLySinhVienService
+                  .fetchDanhSachSinhVien()
+                  .then((res) => {
+                    console.log("ok");
+                    this.props.dispatch(
+                      createAction(FETCH_DANH_SACH_SV, res.data)
+                    );
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+                Swal.fire({
+                  icon: "error",
+                  title: "Thêm không thành công",
+                });
+              });
+          }
+          break;
+        case CAP_NHAT_SINH_VIEN: {
+          quanLySinhVienService
+            .updateSinhVien(this.state.sinhVien.id, this.state.sinhVien)
+            .then((res) => {
+              // console.log(res);
+              // alert("Thêm thành công");
+              Swal.fire({
+                icon: "success",
+                title: "Cập nhật thành công",
+              });
+              quanLySinhVienService
+                .fetchDanhSachSinhVien()
+                .then((res) => {
+                  this.props.dispatch(
+                    createAction(FETCH_DANH_SACH_SV, res.data)
+                  );
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              Swal.fire({
+                icon: "error",
+                title: "Cập nhật không thành công",
+              });
+            });
+        }
+        default:
+          break;
+      }
     } else {
       Swal.fire({
         icon: "error",
