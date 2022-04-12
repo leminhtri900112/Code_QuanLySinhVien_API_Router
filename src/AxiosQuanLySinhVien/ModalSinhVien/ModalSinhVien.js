@@ -123,6 +123,15 @@ class ModalSinhVien extends Component {
                   icon: "success",
                   title: "Thêm thành công",
                 });
+
+                this.setState({
+                  sinhVien: {
+                    id: "",
+                    name: "",
+                    email: "",
+                    phone: "",
+                  },
+                });
                 quanLySinhVienService
                   .fetchDanhSachSinhVien()
                   .then((res) => {
